@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    #search-bar {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 10px;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product-content {
+      padding: 15px;
+    }
+
+    .product-content h2 {
+      font-size: 1.25em;
+      margin: 0;
+      margin-bottom: 10px;
+      color: #333;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .product-content p {
+      margin: 5px 0;
+      color: #666;
+    }
+
+    .product-price {
+      font-size: 1.1em;
+      color: #27ae60;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <h1>Our Products</h1>
+  
+  <!-- Search Bar -->
+  <input type="text" id="search-bar" placeholder="Search products...">
+
+  <div class="product-container" id="product-container">
+    <% products.forEach(product => { %>
+      <div class="product">
+        <img src="<%= product.imgURL %>" alt="<%= product.data.product_title %>">
+        <div class="product-content">
+          <h2><%= product.data.product_title %></h2>
+          <p class="product-price"><%= product.data.product_price %> <%= product.data.currency %></p>
+          <p>Brand: <%= product.product_information.Brand %></p>
+          <p>Series: <%= product.product_information.Series %></p>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+  <script>
+    // JavaScript for search functionality
+    document.getElementById('search-bar').addEventListener('input', function(event) {
+      const query = event.target.value.toLowerCase();
+      const products = document.querySelectorAll('.product');
+      
+      products.forEach(product => {
+        const title = product.querySelector('h2').textContent.toLowerCase();
+        if (title.includes(query)) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

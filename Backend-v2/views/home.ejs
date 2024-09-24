@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME -MORS</title>
+</head>
+<body>
+    <h1>welcome to home page</h1>
+    <h1>Product Image</h1>
+    <img id="productImage" src="" alt="Product Image" />
+    <script>
+        // Fetch the image ID from somewhere or hard-code it for testing
+        const imageId = 'your_image_id_here'; // Replace with your actual image ID
+
+        // Set the src of the image to the endpoint that serves the image
+        document.getElementById('productImage').src = `/prodimg/${imageId}`;
+    </script>
+</body>
+</html>
