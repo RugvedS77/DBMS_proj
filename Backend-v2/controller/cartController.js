@@ -104,37 +104,73 @@ const removeCartItem = async (req, res) => {
 };
 
 
+// const updateCartItem = async (req, res) => {
+//     const { id } = req.params; // The id parameter from the URL
+//     const { quantity } = req.body; // Extract quantity from the request body
+//     console.log('Received PUT request for cart item:', req.params.id);
+//     console.log('Request body:', req.body);
+
+//     if (!quantity || isNaN(quantity)) {
+//         return res.status(400).json({ message: 'Invalid quantity' });
+//     }
+
+//     try {
+//         // Your logic to update the cart item using the id
+//         const updatedCartItem = await Cart.findOneAndUpdate(
+//             { 'cart_info.product_id': id },
+//             { $set: { 'cart_info.$.quantity': quantity, 'cart_info.$.total_price': quantity * 'cart_info.$.cost' }}, // Assuming you use an array of items
+//             { new: true }
+//         );
+
+//         if (!updatedCartItem) {
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+
+//         return res.status(200).json({message: 'Quantity updated successfully',updatedCartItem});
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Server error' });
+//     }
+// }
 const updateCartItem = async (req, res) => {
-    const { id } = req.params; // Get the item ID from the URL
-    const { quantity } = req.body; // Get the new quantity from the request body
+    const { id } = req.params; // The id parameter from the URL
+    const { quantity } = req.body; // Extract quantity from the request body
+    console.log('Received PUT request for cart item:', req.params.id);
+    console.log('Request body:', req.body);
+
+    if (!quantity || isNaN(quantity)) {
+        return res.status(400).json({ message: 'Invalid quantity' });
+    }
 
     try {
-        const cart = await Cart.findOne({ customer_id: req.customer_id });
+        // Find the cart that contains the item
+        const cart = await Cart.findOne({ 'cart_info.product_id': id });
 
         if (!cart) {
-            return res.status(404).json({ message: 'Cart not found' });
+            return res.status(404).json({ message: 'Item not found' });
         }
 
-        const itemIndex = cart.cart_info.findIndex(item => item.product_id === id);
-        if (itemIndex === -1) {
-            return res.status(404).json({ message: 'Item not found in cart' });
-        }
+        // Find the specific item within cart_info
+        const itemToUpdate = cart.cart_info.find(item => item.product_id === id);
+        
+        // Convert cost and quantity to numbers
+        const updatedQuantity = parseInt(quantity, 10);
+        const cost = parseFloat(itemToUpdate.cost);
+        const total_price = cost * updatedQuantity;
 
-        // Update the item's quantity and total price
-        cart.cart_info[itemIndex].quantity = quantity;
-        cart.cart_info[itemIndex].total_price = cart.cart_info[itemIndex].cost * quantity;
+        // Update the quantity and total_price
+        itemToUpdate.quantity = updatedQuantity;
+        itemToUpdate.total_price = total_price;
 
-        // Recalculate grand total
-        cart.grand_total = cart.cart_info.reduce((acc, item) => acc + item.total_price, 0);
-
+        // Save the updated cart
         await cart.save();
-        res.status(200).json({ message: 'Cart item updated successfully', cart });
+
+        return res.status(200).json({ message: 'Quantity updated successfully', updatedCartItem: itemToUpdate });
     } catch (error) {
-        console.error('Error updating cart item:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
     }
 };
-
 
 // Add or Update Cart
 const updateCart = async (req, res) => {

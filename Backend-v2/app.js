@@ -32,7 +32,7 @@ app.use(express.static(publicPath))
 app.use('/auth',authRoutes);
 app.use('/product', prodRoutes);
 app.use('/', homeRoutes);
-app.use('/', cartRoutes)
+app.use('/cart', cartRoutes)
 
 // app.set('view engine', 'ejs'); // Change 'ejs' to the view engine you are using
 // app.set('views',viewsPath);
