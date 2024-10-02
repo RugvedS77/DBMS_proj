@@ -7,7 +7,12 @@ const authRoutes = require('./routes/authRoutes')
 const prodRoutes =require('./routes/prodRoutes')
 const homeRoutes = require('./routes/homeRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const payRoutes = require('./routes/payRoutes')
+const profileRoutes = require('./routes/profileRoutes')
 require('dotenv').config();
+
+// Increase the default max listeners
+require('events').EventEmitter.defaultMaxListeners = 20;
 
 const publicPath = path.join(__dirname, '../e-commerce/public');
 // const viewsPath = path.join(__dirname, 'views');
@@ -32,7 +37,9 @@ app.use(express.static(publicPath))
 app.use('/auth',authRoutes);
 app.use('/product', prodRoutes);
 app.use('/', homeRoutes);
-app.use('/cart', cartRoutes)
+app.use('/cart', cartRoutes);
+app.use('/payment', payRoutes);
+app.use('/profile', profileRoutes);
 
 // app.set('view engine', 'ejs'); // Change 'ejs' to the view engine you are using
 // app.set('views',viewsPath);

@@ -7,7 +7,7 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const cat_name = "Laptop"
+const cat_name = "Books"
 
 // Function to get product details including the description
 async function getProductDetails(asin) {

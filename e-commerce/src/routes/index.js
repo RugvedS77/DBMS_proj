@@ -3,8 +3,9 @@ import Home from '../pages/Home';
 import App from '../App';
 import LoginPage from '../pages/LoginPage';
 import CategoryPage from '../pages/CategoryPage';
-import Profile from '../pages/Profile';
 import ShoppingCart from '../pages/ShoppingCart'
+import PaymentPage from '../components/PaymentPage';
+import ProfilePage from '../pages/ProfilePage';
 
 const router = createBrowserRouter([
   {
@@ -25,12 +26,16 @@ const router = createBrowserRouter([
       },
       {
         path:'profile',
-        element: <Profile/>,
+        element: <ProfilePage/>,
       },
       {
         path:'cart',
         element: <ShoppingCart/>
-      }
+      },
+      {
+        path:'payment',
+        element: <PaymentPage/>
+      },
     ]
   },
 ]);

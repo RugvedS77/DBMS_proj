@@ -58,7 +58,7 @@ const Header = ( { toggleSidebar }) => {
 
             {/* Profile (Icon only) */}
             <div class="flex flex-col items-center text-gray-600 hover:text-black transition duration-200 cursor-pointer ">
-                <CgProfile class="h-10 w-10 md:h-10 md:w-10"/>   
+                <CgProfile class="h-10 w-10 md:h-10 md:w-10" onClick={() => navigate('./profile')}/>   
                 {/* <img src="profile.png" alt="Profile Icon" class="h-10 w-10 md:h-10 md:w-10"/>  */}
             </div>
     

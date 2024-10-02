@@ -7,12 +7,12 @@ const options = {
   method: 'GET',
   url: 'https://real-time-amazon-data.p.rapidapi.com/search',
   params: {
-    query: 'mouse',
+    query: 'marathi books bestsellers',
     page: '1',
     country: 'IN',
     sort_by: 'RELEVANCE',
     product_condition: 'NEW',
-    // brand: 'Acer',
+    // brand: 'Genie',
     is_prime: 'false'
   },
   headers: {

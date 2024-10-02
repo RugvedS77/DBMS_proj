@@ -2,7 +2,9 @@
 const fs = require('fs');
 const axios = require('axios');
 // const {Laptop , Shoe} = require('../schema/product');
-const Product = require('../schema/product') 
+const Product = require('../schema/product'); 
+const { log } = require('console');
+const { find } = require('../schema/payment');
 
 // const cat_name = "Shoes";    // ***Change the name ***
 
@@ -123,37 +125,98 @@ const getProdData_one = async(req,res)=>{
   const prodDetails = Shoe.findById()    // CHANGE THE PRODUCT NAME***
 }
 
-const getProdByCategory = async(req,res)  =>{
-  try {
-    const {category} = req.params;
-    const prod_data = await Product.find({category_name : category}).limit(12);
-    // const shoes = await Shoe.find();         // CHANGE THE PRODUCT NAME***
-    // const laptops = await Laptop.find();
+// const getProdByCategory = async(req,res)  =>{
+//   try {
+//     const {category} = req.params;
+//     const prod_data = await Product.find({category_name : category}).limit(12);
+//     // const shoes = await Shoe.find();         // CHANGE THE PRODUCT NAME***
+//     // const laptops = await Laptop.find();
 
-    // const prod_data = [...laptops, ...shoes]
+//     // const prod_data = [...laptops, ...shoes]
     
-    const prod_with_img = prod_data.map( pData =>{
+//     const prod_with_img = prod_data.map( pData =>{
 
+//       const imgBase64 = pData.data.product_photo;
+//       const imgDataUrl = `data:image/jpeg;base64,${imgBase64}`;
+//       // const product_photo = `data:image/jpeg;base64,${imgBase64}`;
+
+//       return{
+//       id : pData._id,
+//       category_name : pData.category_name,
+//       asin : pData.asin,
+//       data : pData.data,
+//       imgURL : imgDataUrl,
+//       product_information : pData.product_information 
+//       }
+      
+//     })
+//     // res.status(200).render('product', {products: prod_with_img})
+//     res.status(200).json(prod_with_img);
+//   } catch (error) {
+//     console.error("Error occured",error)
+//     res.status(500).send('An error occurred while fetching product data');
+//   }
+// }
+
+const getProdByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const { all } = req.query; // Check for 'all' query parameter
+
+    let prod_data;
+    if (all === 'true') {
+      prod_data = await Product.find({ category_name: category }); // Fetch all products
+    } else {
+      const limit = parseInt(req.query.limit) || 12; // Default limit is 12 if not specified
+      prod_data = await Product.find({ category_name: category }).limit(limit);
+    }
+
+    const prod_with_img = prod_data.map(pData => {
       const imgBase64 = pData.data.product_photo;
       const imgDataUrl = `data:image/jpeg;base64,${imgBase64}`;
-      // const product_photo = `data:image/jpeg;base64,${imgBase64}`;
 
-      return{
-      id : pData._id,
-      category_name : pData.category_name,
-      asin : pData.asin,
-      data : pData.data,
-      imgURL : imgDataUrl,
-      product_information : pData.product_information 
-      }
-      
-    })
-    // res.status(200).render('product', {products: prod_with_img})
+      return {
+        id: pData._id,
+        category_name: pData.category_name,
+        asin: pData.asin,
+        data: pData.data,
+        imgURL: imgDataUrl,
+        product_information: pData.product_information
+      };
+    });
+
     res.status(200).json(prod_with_img);
   } catch (error) {
-    console.error("Error occured",error)
+    console.error("Error occurred", error);
     res.status(500).send('An error occurred while fetching product data');
+  }
+};
+
+const getProdDetail = async (req, res) => {
+  try {
+    const {asin} = req.params;
+
+    let details = await Product(find({asin: asin}));
+
+    const prod_with_img = details.map(pData => {
+      const imgBase64 = pData.data.product_photo;
+      const imgDataUrl = `data:image/jpeg;base64,${imgBase64}`;
+
+      return {
+        id: pData._id,
+        category_name: pData.category_name,
+        asin: pData.asin,
+        data: pData.data,
+        imgURL: imgDataUrl,
+        product_information: pData.product_information
+      };
+    });
+
+    res.status(200).json(prod_with_img);
+  } catch (error) {
+    console.log('Error geting details: ',error);
+    res.status(500).send(`An error occurred while fetching ${asin}'s data`);
   }
 }
 
-module.exports = { uploadProdData, getProdData_all, getProdData_one, getProdByCategory };
+module.exports = { uploadProdData, getProdData_all, getProdData_one, getProdByCategory, getProdDetail };

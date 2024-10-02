@@ -9,7 +9,7 @@ const loginUser = async(req,res)=>{
 
         if(check && check.password === req.body.password){
 
-            const token = jwt.sign({ customer_id: check.customerID }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ customer_id: check.customerID , email: check.email}, process.env.JWT_SECRET, { expiresIn: '1h' });
             // res.json({ token });
             res.status(200).json({ message: 'Login successful',token, redirect: '/home' });
             console.log("Login success");

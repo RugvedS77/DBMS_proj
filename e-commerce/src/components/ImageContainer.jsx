@@ -6,7 +6,7 @@ import image4 from '../assets/container/4.jpg';
 import image5 from '../assets/container/5.jpg';
 import image6 from '../assets/container/6.jpg';
 
-const ImageContainer = ({ items }) => {
+const ImageContainer = () => {
   const images = [image1,image2,image3,image4,image5, image6];
 
   return (
